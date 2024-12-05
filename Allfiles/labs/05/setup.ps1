@@ -76,10 +76,38 @@ foreach ($provider in $provider_list){
     Write-Host "$provider : $status"
 }
 
-# Generate unique random suffix
-[string]$suffix =  -join ((48..57) + (97..122) | Get-Random -Count 7 | % {[char]$_})
-Write-Host "Your randomly-generated suffix for Azure resources is $suffix"
+# Function to generate a unique deterministic suffix based on an input string
+function Get-UniqueString {
+    param (
+        [string]$input  # The input string for which a unique suffix will be generated
+    )
+
+    # Ensure the input is treated as a string
+    $input = [string]$input
+
+    # Compute an MD5 hash of the input string
+    $hash = [System.Security.Cryptography.MD5]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($input))
+
+    # Convert the first few bytes of the hash into a hexadecimal string
+    $uniqueString = [System.BitConverter]::ToUInt32($hash, 0).ToString("x")
+
+    return $uniqueString
+}
+
+# Use a specific string as input (no user input required)
+[string]$inputString = "ResourceGroup1"
+
+# Generate a deterministic unique suffix
+[string]$suffix = Get-UniqueString -input $inputString
+
+# Display the generated suffix
+Write-Host "Your deterministic unique suffix for Azure resources is" $suffix
+
+# Use the unique suffix to create a resource group name
 $resourceGroupName = "dp203-$suffix"
+
+# Display the full resource group name
+Write-Host "Your resource group name is" $resourceGroupName
 
 # Choose a random region
 Write-Host "Finding an available region. This may take several minutes...";
