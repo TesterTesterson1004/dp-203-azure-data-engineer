@@ -95,7 +95,7 @@ function Get-UniqueString {
 }
 
 # Use a specific string as input (no user input required)
-[string]$inputString = "ResourceGroup1"
+[string]$inputString = "dp203"
 
 # Generate a deterministic unique suffix
 [string]$suffix = Get-UniqueString -input $inputString
