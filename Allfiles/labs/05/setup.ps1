@@ -104,7 +104,7 @@ function Get-UniqueString {
 Write-Host "Your deterministic unique suffix for Azure resources is" $suffix
 
 # Use the unique suffix to create a resource group name
-$resourceGroupName = "dp203-$suffix"
+$resourceGroupName = "dp203"
 
 # Display the full resource group name
 Write-Host "Your resource group name is" $resourceGroupName
