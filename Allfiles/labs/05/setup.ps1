@@ -79,19 +79,21 @@ foreach ($provider in $provider_list){
 # Function to generate a unique deterministic suffix based on an input string
 function Get-UniqueString {
     param (
-        [string]$input  # The input string for which a unique suffix will be generated
+        [string[]]$Inputs  # Array of input strings
     )
 
-    # Ensure the input is treated as a string
-    $input = [string]$input
+    # Combine all input strings into one
+    $combinedString = ($Inputs -join '')
 
-    # Compute an MD5 hash of the input string
-    $hash = [System.Security.Cryptography.MD5]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($input))
+    # Compute the SHA-256 hash
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    $hashBytes = $sha256.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combinedString))
 
-    # Convert the first few bytes of the hash into a hexadecimal string
-    $uniqueString = [System.BitConverter]::ToUInt32($hash, 0).ToString("x")
+    # Encode the hash to Base64
+    $base64Hash = [Convert]::ToBase64String($hashBytes)
 
-    return $uniqueString
+    # Truncate to the first 13 characters
+    return $base64Hash.Substring(0, 13)
 }
 
 # Use a specific string as input (no user input required)
