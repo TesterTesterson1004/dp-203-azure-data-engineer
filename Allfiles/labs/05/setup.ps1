@@ -78,7 +78,7 @@ foreach ($provider in $provider_list){
 
 function Get-UniqueString {
     param (
-        [string[]$input  # Array of input strings
+        [string]$input  # Array of input strings
     )
 
     # Combine all input strings into one
