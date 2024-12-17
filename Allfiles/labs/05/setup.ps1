@@ -160,8 +160,10 @@ Write-Host "Creating $resourceGroupName resource group in $Region ..."
 New-AzResourceGroup -Name $resourceGroupName -Location $Region | Out-Null
 
 # Create Synapse workspace
-$synapseWorkspace = "synapse$suffix"
-$dataLakeAccountName = "dl$suffix"
+$lowerCaseAccountName1 = "synapse$suffix"
+$synapseWorkspace = $lowerCaseAccountName1.ToLower()
+$lowerCaseAccountName2 = "datalake$suffix"
+$dataLakeAccountName = $lowerCaseAccountName.ToLower()
 $sparkPool = "spark$suffix"
 
 write-host "Creating $synapseWorkspace Synapse Analytics workspace in $resourceGroupName resource group..."
