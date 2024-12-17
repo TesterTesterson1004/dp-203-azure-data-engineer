@@ -164,7 +164,8 @@ $lowerCaseAccountName1 = "synapse$suffix"
 $synapseWorkspace = $lowerCaseAccountName1.ToLower()
 $lowerCaseAccountName2 = "datalake$suffix"
 $dataLakeAccountName = $lowerCaseAccountName2.ToLower()
-$sparkPool = "spark$suffix"
+$lowerCaseAccountName3 = "spark$suffix"
+$sparkPool = $lowerCaseAccountName3.ToLower()
 
 write-host "Creating $synapseWorkspace Synapse Analytics workspace in $resourceGroupName resource group..."
 write-host "(This may take some time!)"
