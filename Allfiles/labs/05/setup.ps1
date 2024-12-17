@@ -78,21 +78,23 @@ foreach ($provider in $provider_list){
 
 function Get-UniqueString {
     param (
-        [string]$input  # Array of input strings
+        [string[]]$input  # Array of input strings
     )
 
     # Combine all input strings into one
-    $combinedString = ($input -join '')
+    $uniqueString = ($input -join '')
 
     # Compute the SHA-256 hash
     $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    $hashBytes = $sha256.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combinedString))
+    $hashBytes = $sha256.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($uniqueString))
 
     # Encode the hash to Base64
     $base64Hash = [Convert]::ToBase64String($hashBytes)
 
     # Truncate to the first 13 characters
-    return $base64Hash.Substring(0, 13)
+    $uniqueString = $base64Hash.Substring(0, 13)
+
+    return $uniqueString
 }
 
 # Use a specific string as input (no user input required)
