@@ -76,14 +76,13 @@ foreach ($provider in $provider_list){
     Write-Host "$provider : $status"
 }
 
-# Function to generate a unique deterministic suffix based on an input string
 function Get-UniqueString {
     param (
-        [string[]]$Inputs  # Array of input strings
+        [string[]$input  # Array of input strings
     )
 
     # Combine all input strings into one
-    $combinedString = ($Inputs -join '')
+    $combinedString = ($input -join '')
 
     # Compute the SHA-256 hash
     $sha256 = [System.Security.Cryptography.SHA256]::Create()
