@@ -95,10 +95,11 @@ function Get-UniqueString {
     return $base64Hash.Substring(0, 13)
 }
 
-$labinstance = az group show --name donotuse --query "tags.LabInstance" --output tsv
+$sub = az account show --query "id" --output tsv
+$response = az tag list --resource-id "/subscriptions/$sub" --query "properties.tags.LabInstance" --output tsv
 
 # Use a specific string as input (no user input required)
-[string]$inputString = "donotuse", $labinstance
+[string]$inputString = "donotuse", $response
 
 # Generate a deterministic unique suffix
 [string]$suffix = Get-UniqueString -input $inputString
