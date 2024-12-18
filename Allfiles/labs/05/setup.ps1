@@ -3,6 +3,7 @@ write-host "Starting script at $(Get-Date)"
 
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Install-Module -Name Az.Synapse -Force
+Install-Module -Name AzExpression -Force
 
 # Handle cases where the user has multiple subscriptions
 $subs = Get-AzSubscription | Select-Object
@@ -76,33 +77,14 @@ foreach ($provider in $provider_list){
     Write-Host "$provider : $status"
 }
 
-function Get-UniqueString {
-    param (
-        [string[]]$Inputs  # Array of input strings
-    )
-
-    # Combine all input strings into one
-    $combinedString = ($Inputs -join '')
-
-    # Compute the SHA-256 hash
-    $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    $hashBytes = $sha256.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combinedString))
-
-    # Encode the hash to Base64
-    $base64Hash = [Convert]::ToBase64String($hashBytes)
-
-    # Truncate to the first 13 characters
-    return $base64Hash.Substring(0, 13)
-}
-
 $sub = az account show --query "id" --output tsv
-$response = az tag list --resource-id "/subscriptions/$sub" --query "properties.tags.LabInstance" --output tsv
+$sublabid = az tag list --resource-id "/subscriptions/$sub" --query "properties.tags.LabInstance" --output tsv
 
 # Use a specific string as input (no user input required)
-[string]$inputString = $response
+[string]$inputString = $sublabid
 
 # Generate a deterministic unique suffix
-[string]$suffix = Get-UniqueString -input $inputString
+[string]$suffix = New-AzUniqueString -InputStrings $sublabid
 
 # Display the generated suffix
 Write-Host "Your deterministic unique suffix for Azure resources is" $suffix
@@ -167,7 +149,7 @@ $lowerCaseAccountName1 = "synapse$suffix"
 $synapseWorkspace = $lowerCaseAccountName1.ToLower()
 $lowerCaseAccountName2 = "datalake$suffix"
 $dataLakeAccountName = $lowerCaseAccountName2.ToLower()
-$lowerCaseAccountName3 = "spark$suffix"
+$lowerCaseAccountName3 = "sp$suffix"
 $sparkPool = $lowerCaseAccountName3.ToLower()
 
 write-host "Creating $synapseWorkspace Synapse Analytics workspace in $resourceGroupName resource group..."
