@@ -77,25 +77,6 @@ foreach ($provider in $provider_list){
     Write-Host "$provider : $status"
 }
 
-function Get-UniqueString {
-    param (
-        [string[]]$Inputs  # Array of input strings
-    )
-
-    # Combine all input strings into one
-    $combinedString = ($Inputs -join '')
-
-    # Compute the SHA-256 hash
-    $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    $hashBytes = $sha256.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combinedString))
-
-    # Encode the hash to Base64
-    $base64Hash = [Convert]::ToBase64String($hashBytes)
-
-    # Truncate to the first 13 characters
-    return $base64Hash.Substring(0, 13)
-}
-
 $sub = az account show --query "id" --output tsv
 $sublabid = az tag list --resource-id "/subscriptions/$sub" --query "properties.tags.LabInstance" --output tsv
 
