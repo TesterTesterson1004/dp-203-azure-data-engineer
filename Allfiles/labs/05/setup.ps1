@@ -99,7 +99,7 @@ $sub = az account show --query "id" --output tsv
 $response = az tag list --resource-id "/subscriptions/$sub" --query "properties.tags.LabInstance" --output tsv
 
 # Use a specific string as input (no user input required)
-[string]$inputString = "donotuse", $response
+[string]$inputString = $response
 
 # Generate a deterministic unique suffix
 [string]$suffix = Get-UniqueString -input $inputString
