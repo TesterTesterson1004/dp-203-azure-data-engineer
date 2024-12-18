@@ -3,7 +3,7 @@ write-host "Starting script at $(Get-Date)"
 
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Install-Module -Name Az.Synapse -Force
-Install-Module -Name AzExpression
+Install-Module -Name AzExpression -Force
 
 # Handle cases where the user has multiple subscriptions
 $subs = Get-AzSubscription | Select-Object
